@@ -23,9 +23,11 @@ app.get("/", (req, res) => {
   res.send("Auth Service RekamBuku (Lokal) is running...");
 });
 
-// Langsung jalankan listen tanpa syarat Vercel
-app.listen(PORT, () => {
-  console.log(`Server Auth Service berjalan di: http://localhost:${PORT}`);
-});
+// Konfig Vercel
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 export default app;
