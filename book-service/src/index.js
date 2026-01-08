@@ -35,12 +35,11 @@ app.get("/", (req, res) => {
   res.send("Book Service RekamBuku (UAS Microservices) is running on port 3002...");
 });
 
-/**
- * PERUBAHAN 5: Jalankan Server Lokal
- * Menghapus logika pengecekan Vercel agar bisa langsung jalan di komputer Anda
- */
-app.listen(PORT, () => {
-  console.log(`Book Service is running on port ${PORT}`);
-});
+// Konfig Vercel
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
 
 export default app;
