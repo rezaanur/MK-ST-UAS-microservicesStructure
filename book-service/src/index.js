@@ -16,7 +16,16 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 
 app.use(express.json());
-app.use(cors());
+
+// Konfigurasi CORS untuk allow frontend dan auth service
+const corsOptions = {
+  origin: ["http://localhost:5173", "http://localhost:3173", "https://mk-st-uas-frontend.vercel.app", "https://mk-st-uas-microservices-auth-service.vercel.app", process.env.FRONTEND_URL, process.env.AUTH_SERVICE_URL],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 
 /**
  * PERUBAHAN 3: Koneksi Database

@@ -22,7 +22,13 @@ const protectRoute = async (req, res, next) => {
      * Kita memanggil API Auth Service menggunakan Axios.
      */
     try {
-      const response = await axios.get(`${process.env.AUTH_SERVICE_URL}/api/auth/user/${decoded.userId}`);
+      // Gunakan URL lengkap ke auth service
+      const authServiceUrl = `${process.env.AUTH_SERVICE_URL || "http://localhost:3001"}/api/auth/user/${decoded.userId}`;
+      console.log("Verifying with Auth Service URL:", authServiceUrl);
+      
+      const response = await axios.get(authServiceUrl, {
+        timeout: 5000, // 5 second timeout
+      });
 
       const user = response.data;
 
@@ -36,7 +42,11 @@ const protectRoute = async (req, res, next) => {
       req.user = user;
       next();
     } catch (apiError) {
-      console.error("Error connecting to Auth Service:", apiError.message);
+      console.error("Error connecting to Auth Service:", {
+        message: apiError.message,
+        config: apiError.config?.url,
+        status: apiError.response?.status
+      });
       return res.status(401).json({ message: "Failed to verify user with Auth Service" });
     }
   } catch (error) {

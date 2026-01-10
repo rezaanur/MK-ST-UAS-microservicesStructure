@@ -10,7 +10,16 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
-app.use(cors());
+
+// Konfigurasi CORS untuk allow frontend dan service lain
+const corsOptions = {
+  origin: ["http://localhost:5173", "http://localhost:3173", "https://mk-st-uas-frontend.vercel.app", process.env.FRONTEND_URL],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 
 // Jalankan koneksi database
 // Ini akan mengambil MONGO_URI dari file .env lokal Anda
